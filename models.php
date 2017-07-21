@@ -9,11 +9,11 @@ if($_GET['id']==0){
   exit();
 };
 if($_GET['id']==5){
-  print_r(json_encode(['1', '2', '3', '4', '5','1', '2', '3', '4', '5' ]));
+  print_r(json_encode(['responce'=>'fail','test'=>'fail','test'=>'fail','test'=>'fail','test'=>'fail','test'=>'fail','test'=>'fail']));
   exit();
 };
 if($_GET['id']==10){
-  print_r(json_encode(['1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5' ]));
+  print_r(json_encode(['responce'=>'fail','test'=>'fail','test'=>'fail','test'=>'fail','test'=>'fail','test'=>'fail','test'=>'fail','test'=>'fail','test'=>'fail','test'=>'fail','test'=>'fail','test'=>'fail','test'=>'fail','test'=>'fail','test'=>'fail']));
   exit();
 };
 if($_GET['id']==10){
