@@ -4,23 +4,22 @@ header("Access-Control-Allow-Credentials: true");
 header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 header('Access-Control-Max-Age: 1000');
 header('Access-Control-Allow-Headers: Content-Type, Content-Range, Content-Disposition, Content-Description');
-
 if($_GET['id']==0)){
   print_r(['1', '2', '3', '4', '5' ]);
-  exit;
+  exit();
 };
 if($_GET['id']==5)){
   print_r(['1', '2', '3', '4', '5','1', '2', '3', '4', '5' ]);
-  exit;
+  exit();
 };
 if($_GET['id']==10)){
   print_r(['1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5' ]);
-  exit;
+  exit();
 };
 if($_GET['id']==10)){
   print_r(['1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4' ]);
-  exit;
+  exit();
 };
-
-
+print_r($_GET);
+//print_r(['1', '2', '3', '4', '5', '6', '7' ]);
 ?>
