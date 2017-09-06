@@ -1,0 +1,14 @@
+{
+  "name": "component-pinch",
+  "version": "0.0.7",
+  "description": "pinch helper",
+  "dependencies": {
+    "component-events": "1.0.9"
+  },
+  "component": {
+    "scripts": {
+      "pinch/index.js": "index.js",
+      "pinch/e.js": "e.js"
+    }
+  }
+}
