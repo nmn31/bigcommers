@@ -1,0 +1,618 @@
+
+<!-- saved from url=(0048)http://vitalsoftsolution.com/demo/map-exam/exam/ -->
+<html style="cursor: pointer;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ 
+  
+<script src="./vitalsoftsolution.com_files/jquery-1.12.4.min.js"></script>
+ 
+<style>
+html {
+	overflow:hidden ;
+	display: initial;
+    height: auto;
+}
+img{
+	
+-moz-user-select: none;
+-moz-user-drag: none;
+-webkit-user-drag: none;
+-webkit-user-select: none;
+-ms-user-select: none;
+user-drag: none; 
+user-select: none;
+	
+}
+.animate {
+	transition: transform 0.3s ease-out; 
+	z-index:-1;
+	height: auto !important;
+    max-width: none !important;
+	
+	user-drag: none; 
+user-select: none;
+-moz-user-select: none;
+-webkit-user-drag: none;
+-webkit-user-select: none;
+-ms-user-select: none;
+	
+}
+.extra-scale{
+	transform: scale(3);
+	z-index: 200 !important;
+}
+
+.l-button{
+	background: red;
+    padding: 4px;
+    color: #fff;
+    border: none;
+	box-shadow: 0 2px 20px grey;
+	border-radius:10px;
+	cursor: pointer;
+}
+.l-button:hover{
+	transform: scale(2);
+}
+#container{
+	height:800px;
+	min-width:100% ;
+ 
+	transform: scale(0.15);
+    transform-origin: left;
+    -webkit-transform-origin-y: 0px;
+    -webkit-transform-origin-x: 0px;
+    -moz-transform-origin-y: 0px;
+    -moz-transform-origin-x: 0px;
+    -ms-transform-origin-y: 0px;
+    -ms-transform-origin-x: 0px;
+	-o-transform-origin-y: 0px;
+    -o-transform-origin-x: 0px;
+	transform-origin-y: 0px;
+    transform-origin-x: 0px;
+	
+	margin-top: 100px;
+
+ }
+#meta-box{
+z-index: 150;
+    color: red;
+    background: #ffffff94;
+    padding: 0 20px;
+  
+}
+.btn-control:hover{
+	
+	transform: scale(1.2);
+}
+#button-holder{
+	  
+   /* width: 100%;
+   background: red;
+ overflow: hidden;
+ transform: scale(2);*/
+	position:fixed;
+	top:0px;
+	left:0px;
+	z-index:500;
+	display:inline;
+}
+.btn-control{
+	  
+   
+    z-index: 150;
+    background: royalblue;
+    border: none;
+    height: 100%;
+    font-size: 30px;
+    min-width: 35px;
+    cursor: pointer;
+    float: left;
+    margin-right: 40px;
+    padding: 8px 20px 10px 20px;
+}
+.wrong{
+background:blue !important;
+}
+.correct{
+background:green !important;
+}
+body{
+	    background: #d2cece96;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+#exam-button{
+	left: 600px;
+	border-radius: 25px;
+    font-size: 29px;
+	color: #fff;
+	box-shadow: 0px 0px 12px 10px #fffff;
+	border: 4px solid #fff;
+    height: 60px;
+	
+}
+
+#resultbox{
+width: 50%;
+    background: #181b18c4;
+    height: 400px;
+    position: fixed;
+    top: 70px;
+    left: 23%;
+    z-index: 990;
+    margin: 0 auto;
+    display: block;
+    color: #fff;
+    padding: 40px;
+    border: 5px groove #fff;
+    border-radius: 10px;	
+	display:none;
+	overflow:auto;
+	}
+#resultbox span	{
+		
+		position: relative;
+    top: -30px;
+    right: -30px;
+    float: right;
+    border-radius: 5px;
+    border: 1px solid;
+    padding: 5px;
+		
+	}
+#resultbox span:hover{
+	
+	   border: 1px solid red;
+}	
+@media only screen and (min-width: 600px){ 
+	 #container{
+	 /*
+		 height:2800px;
+		*/ 
+	 }
+html {
+ overflow:auto;
+	
+}
+#button-holder{
+	 
+}
+#container { transition: all 3s ease-in-out; }
+} 
+</style>
+ 
+
+<script>
+exam_questions_number=10 ;
+qArr =Array();
+globalIndex=0;
+ is_exam_start=false ;
+ is_answered=false;   // if question answared then its true 
+ myTime=15; 
+ intervalx="";
+exam_id="";
+score=0;
+	mylocations = [{"ID":0,"Name":"Pahurehure Inlet","X":11644,"Y":4878},{"ID":1,"Name":"Ninepin Rock","X":3900,"Y":4700},{"ID":2,"Name":"Paratutae Island","X":4075,"Y":4600},{"ID":3,"Name":"Wongu Wangu Bay","X":4084,"Y":4523},{"ID":4,"Name":"Nahana Point","X":4158,"Y":4457},{"ID":5,"Name":"Boulder Bay","X":4275,"Y":4355},{"ID":6,"Name":"Makaka Bay","X":4428,"Y":4230},{"ID":7,"Name":"Beacon Point","X":4490,"Y":4218},{"ID":8,"Name":"Waterfall Bay","X":4696,"Y":4104},{"ID":9,"Name":"Sawyers Point","X":4893,"Y":4022},{"ID":10,"Name":"Kaiteke Point","X":5178,"Y":3875},{"ID":11,"Name":"Te Pirau Point","X":5233,"Y":4390},{"ID":12,"Name":"Taratara Point","X":5370,"Y":4390},{"ID":13,"Name":"Tipitai Point","X":5451,"Y":4395},{"ID":14,"Name":"Wattle Bay","X":5600,"Y":4530},{"ID":15,"Name":"Orua Bay","X":6086,"Y":4510},{"ID":16,"Name":"Big Bay","X":6820,"Y":4390},{"ID":17,"Name":"Mako Point","X":6600,"Y":4200},{"ID":18,"Name":"Huia Bank","X":5600,"Y":4030},{"ID":19,"Name":"Lady Bell Point","X":5980,"Y":3870},{"ID":20,"Name":"Daniel Bay","X":5878,"Y":3706},{"ID":21,"Name":"Kakamatua Point","X":5720,"Y":3650},{"ID":22,"Name":"Kaitorakihi Bay","X":5575,"Y":3565},{"ID":23,"Name":"Kakamatua inlet","X":5815,"Y":3455},{"ID":24,"Name":"Puponga Point","X":6390,"Y":3880},{"ID":25,"Name":"Mill Bay","X":6075,"Y":3120},{"ID":26,"Name":"Wairopa Channel","X":6644,"Y":2900},{"ID":27,"Name":"Lawry Point","X":6440,"Y":2990},{"ID":28,"Name":"Taumatorea Point","X":6710,"Y":2770},{"ID":29,"Name":"Big Muddy Creek","X":6367,"Y":2500},{"ID":30,"Name":"Symonds Bay","X":6415,"Y":2485},{"ID":31,"Name":"Takoroa Point","X":7010,"Y":2430},{"ID":32,"Name":"Little Muddy Creek","X":6940,"Y":2260},{"ID":33,"Name":"Laingholm Point","X":7120,"Y":2360},{"ID":34,"Name":"Shag Point","X":7420,"Y":2080},{"ID":35,"Name":"Te Tau Bank","X":7580,"Y":2450},{"ID":36,"Name":"Opou Point","X":7535,"Y":1875},{"ID":37,"Name":"Wood Bay","X":7440,"Y":1800},{"ID":38,"Name":"Motu Karaka Bank","X":7910,"Y":1620},{"ID":39,"Name":"Block House Bay","X":8260,"Y":1385},{"ID":40,"Name":"Te Whau Point","X":8225,"Y":1420},{"ID":41,"Name":"Wattle Bay","X":8700,"Y":1580},{"ID":42,"Name":"Cape Horn","X":8866,"Y":1675},{"ID":43,"Name":"Hillsborough Bay","X":9575,"Y":1350},{"ID":44,"Name":"Onehunga Wharf","X":9860,"Y":1400},{"ID":45,"Name":"Puketutu Island","X":9100,"Y":2350},{"ID":46,"Name":"Karole Bank","X":8640,"Y":3550},{"ID":47,"Name":"Waokariri Creek","X":10585,"Y":3180},{"ID":48,"Name":"Otaimako Creek","X":10715,"Y":3440},{"ID":49,"Name":"Wiroa Island","X":10480,"Y":3710},{"ID":50,"Name":"Hikihiki Bank","X":10355,"Y":4585},{"ID":51,"Name":"Hangore Bank","X":8360,"Y":4790},{"ID":52,"Name":"Awhitu Point","X":9800,"Y":5690},{"ID":53,"Name":"Poutawa Bank","X":8883,"Y":5990},{"ID":54,"Name":"Waiku Channel","X":7470,"Y":5128},{"ID":55,"Name":"Grahams Beach","X":7260,"Y":4860},{"ID":56,"Name":"Hudsons Beach","X":7415,"Y":4710},{"ID":57,"Name":"Kauritutahi Creek","X":7100,"Y":5615},{"ID":58,"Name":"Mataka Wau Point","X":7350,"Y":6160},{"ID":59,"Name":"Otamaneara Island","X":7420,"Y":6310},{"ID":60,"Name":"Matakawau Creek","X":7240,"Y":6480},{"ID":61,"Name":"Kellys Landing","X":7435,"Y":6500},{"ID":62,"Name":"Wairoa Point","X":7560,"Y":6795},{"ID":63,"Name":"Rangiriri Creek","X":7400,"Y":7010},{"ID":64,"Name":"Karaka Point","X":7910,"Y":7010},{"ID":65,"Name":"To Karoa Point","X":7800,"Y":7250},{"ID":66,"Name":"Naghere Bay","X":7950,"Y":7170},{"ID":67,"Name":"Ohiku Creek","X":7810,"Y":7495},{"ID":68,"Name":"Tetoro Point","X":7980,"Y":7400},{"ID":69,"Name":"Waiau Beach","X":8190,"Y":7250},{"ID":70,"Name":"Waitete Point","X":8310,"Y":7340},{"ID":71,"Name":"Kahawai Point","X":8290,"Y":7600},{"ID":72,"Name":"Glenbrook Beach","X":8480,"Y":7720},{"ID":73,"Name":"Waiuku River","X":8245,"Y":7730},{"ID":74,"Name":"Kallritutahi Island","X":7370,"Y":5800},{"ID":75,"Name":"Kauri Point","X":7280,"Y":4450},{"ID":76,"Name":"Purakau Channel ","X":7255,"Y":3350},{"ID":77,"Name":"Karore Bank","X":7230,"Y":3550},{"ID":78,"Name":"Kaitarakihi Point","X":5260,"Y":3657},{"ID":79,"Name":"Hings Bay","X":5185,"Y":3520},{"ID":80,"Name":"Huia Bay","X":5275,"Y":3470},{"ID":81,"Name":"Harry Point","X":5222,"Y":3417},{"ID":82,"Name":"Haley Point","X":5260,"Y":3320},{"ID":83,"Name":"White Bluff","X":9540,"Y":1415},{"ID":84,"Name":"Shark Island","X":11719,"Y":4949}] ;
+function showCoords(event) {
+  var x = event.offsetX;
+    var y = event.offsetY;
+    var X = event.pageX;
+    var Y = event.pageY;
+    var coords = "X coords: " + x + ", Y coords: " + y +'<br> Ob X :'+ X + '  - Y - :'+ Y ;
+    //document.getElementById("demo").innerHTML = coords;
+  console.log(coords);
+}
+
+text="";
+ for (var key in mylocations) {
+  if (mylocations.hasOwnProperty(key)) {
+		
+		x =(mylocations[key]['X'] -10);
+		y=(mylocations[key]['Y'] -10);
+	 text =text+ "<button  title='"+ mylocations[key]['Name']  +"' data='"+ mylocations[key]['ID']+"' class='l-button point_button' id='ID"+ mylocations[key]['ID'] +"' style='left:"+ x +"px;top: "+y+"px;position:absolute'>LOCATION"+ mylocations[key]['ID'] +"</button>";
+	 
+ 
+}
+}
+
+level =0.15;
+function zoomlevel(ids,amount=0.10){
+
+if(ids=='plus')
+level=( level+amount );
+
+if(ids=='less')
+level= (level-amount );
+
+if(ids=='equal')
+level= 1;
+
+ 
+if(level < 0.10) { level=amount ; return ;  } 
+
+$('#level').html(Math.round((level * 100))+'%' );
+
+$('#container').css('transform','scale('+ level +')');
+	
+
+
+}
+$(document).ready(function(){
+ 
+ 
+$('#ID23').focus();
+$('#container').append(text);
+
+$('.point_button').click(function(){
+
+if(is_exam_start ==false) {
+	alert('Start Exam First');
+	return ;
+}
+if(is_answered == true) return ;
+//alert($(this).attr('title')) ;
+$(this).addClass('extra-scale');
+
+ is_answered =true;
+
+if(globalIndex == $(this).attr('data')){
+//	$(this).addClass('correct');
+	exam_questions(  mylocations[globalIndex]['ID'], mylocations[globalIndex]['Name'] , $(this).attr('data') ,1,'manual') ;
+	alert('Correct Answer');
+	score=score+1;
+	$('#exam-score span').html(score);
+	//exam_questions(question_number,question,answer,given_answer,answer_type) ;
+	
+}else{
+	exam_questions(   mylocations[globalIndex]['ID'], mylocations[globalIndex]['Name'] , $(this).attr('data') ,0,'manual') ;
+	//$('#equal').click();
+	$('#container').css('transform','scale(1)');
+	level = 1;
+	$('#level').html('100%' );	
+	$('#ID'+globalIndex).addClass('correct');
+	//$('#ID'+globalIndex).focus();
+	$('#ID'+globalIndex).addClass('extra-scale');
+	
+	$(this).addClass('wrong');
+	//alert('wrong Answer');
+}
+if($(window).width() >1000){
+//console.log((mylocations[globalIndex]['X']/2) +'-Y-'+ (mylocations[globalIndex]['Y']/2));
+$(window).scrollLeft((mylocations[globalIndex]['X']) -($(window).width()/2));
+$(window).scrollTop((mylocations[globalIndex]['Y']) -250);
+//$('#ID'+globalIndex).focus();
+}else{
+$('#ID'+globalIndex).focus();
+}
+
+clearTimeout(intervalx);
+myTime=15 ;
+})
+
+$('#exam-button').click(function(){
+
+	if(exam_id ==""){
+	$.ajax({
+			type:'POST',
+			url:'http://vitalsoftsolution.com/demo/map-exam/wp-admin/admin-ajax.php',
+			data:{'action':'start_exam'},
+			success:function(data){
+				if(data.trim() != ""){
+					$('#exam-id span').html(data);
+					exam_id=data;
+				}
+			}
+		
+	})
+	}
+	
+	
+if(is_answered == false &&  is_exam_start ==true){ alert("Give answer first") ; return ;}
+
+//$(window).scrollTop(150);
+//$(window).scrollLeft(150);
+
+		if(qArr.length >= exam_questions_number) { 
+		$.ajax({
+			type:'POST',
+			url:'http://vitalsoftsolution.com/demo/map-exam/wp-admin/admin-ajax.php',
+			data:{'action':'display_exam_results'},
+			success:function(data){
+				if(data.trim() != ""){
+					$('#resultbox').show();
+					$('#resultbox').html(data);
+				//	$('#exam-id span').html(data);
+					//exam_id=data;
+				}
+			}
+		
+	})
+	
+
+		//alert('Exam Over '); 
+		return;
+
+
+		}
+		
+	$('.point_button').removeClass('correct');
+	$('.point_button').removeClass('wrong');
+	$('.point_button').removeClass('extra-scale');
+	is_answered =false;
+	qIndex = Math.round(Math.random()* (mylocations.length) );
+	if(qArr.indexOf(qIndex) != -1) {
+	for(i=0; i<10 ;i++){	
+		qIndex = Math.round(Math.random()* (mylocations.length) ); 
+		if(qArr.indexOf(qIndex) == -1)  break ;
+	}
+	}
+	qArr.push(qIndex);
+	//console.log(qIndex);
+	
+	//===
+	//$(window).scrollLeft((mylocations[globalIndex]['X']/2) -($(window).width()/2));
+//$(window).scrollTop((mylocations[globalIndex]['Y']/2) -250);
+	
+	//===
+	
+	globalIndex =qIndex ;
+	$('#meta-box h2').html( "Question ( "+ qArr.length  +" / "+ exam_questions_number +" ) : Where is "+ mylocations[qIndex]['Name']);
+	
+	is_exam_start=true ;
+	$(this).html('Next Question');
+	
+
+	 myTime=15 ;
+	intervalx = setInterval(timer_start,1000) ;
+//	$('#container').css('transform','scale('+ level +')');
+	if(qArr.length == exam_questions_number) $(this).html('Show Results');
+})
+
+})
+
+function exam_questions(   question_number,question,answer,given_answer,answer_type){
+
+	data ={'action': 'exam_questions' ,'exam_id':exam_id ,'qsrno': qArr.length  , 'question_number':question_number ,'question':question , 'answer':answer , 'given_answer':given_answer ,'answer_type':answer_type } ;
+	
+	
+$.ajax({
+			type:'POST',
+			url:'http://vitalsoftsolution.com/demo/map-exam/wp-admin/admin-ajax.php',
+			data:data,
+			success:function(result){
+				 //console.log(result);
+			}
+		
+	})
+
+
+
+}
+function timer_start(){
+	
+	$('#timer').html(myTime);
+	//console.log(myTime);
+	
+	if(myTime == 0) {
+	exam_questions(  mylocations[globalIndex]['ID'], mylocations[globalIndex]['Name'] , 0 ,0,'timeout') ;
+		clearTimeout(intervalx);
+		if(confirm('Time Over Start Next Question ?'))
+		 is_answered =true;
+		 is_exam_start =true;
+		$('#exam-button').click();
+		
+	}
+	myTime=(myTime-1);
+	return ;
+}
+
+</script>
+
+ 
+</head>
+<body>
+<div id="resultbox" style=""><span onclick="$(&#39;#resultbox&#39;).hide()">X</span></div>
+<div id="button-holder">
+<button class="btn-control" style="left: 0px;" onclick="zoomlevel(this.id)" id="less">-</button>
+<button class="btn-control" style="left: 50px;" onclick="zoomlevel(this.id)" id="equal">=</button>
+<button class="btn-control" style="left: 100px;" onclick="zoomlevel(this.id)" id="plus">+</button>
+<button class="btn-control" style="left: 150px;" id="level">20%</button>
+<button class="btn-control" style="left: 250px;" id="user-button">USER : test1 test2</button>
+<button class="btn-control" id="exam-button">Start Assessment</button>
+ 
+<div id="meta-box">
+	
+	<h3 style="display:block ;width:250px ;float:left;clear: both;" id="exam-score">Exam Score: <span>0 </span> </h3>  
+	<h3 style="width: 100px;  float: left;">Time : <span id="timer">  </span></h3>
+	<h3 style="display:none ; clear: both;" id="exam-id">Exam ID : <span> </span> </h3>  
+	<h2 style="clear: both;">Question : </h2>  
+	
+</div>
+</div>
+<div id="container" style="transform-origin: 0px 0px 0px; transform: scale(0.2);">
+ 
+<img id="mapimg" class="animate zoom" ondrag="return false ;" onclick="showCoords(event)" src="./vitalsoftsolution.com_files/map-mark-final-min.jpg">
+ 
+<button title="Pahurehure Inlet" data="0" class="l-button point_button" id="ID0" style="left:11634px;top: 4868px;position:absolute">LOCATION0</button><button title="Ninepin Rock" data="1" class="l-button point_button" id="ID1" style="left:3890px;top: 4690px;position:absolute">LOCATION1</button><button title="Paratutae Island" data="2" class="l-button point_button" id="ID2" style="left:4065px;top: 4590px;position:absolute">LOCATION2</button><button title="Wongu Wangu Bay" data="3" class="l-button point_button" id="ID3" style="left:4074px;top: 4513px;position:absolute">LOCATION3</button><button title="Nahana Point" data="4" class="l-button point_button" id="ID4" style="left:4148px;top: 4447px;position:absolute">LOCATION4</button><button title="Boulder Bay" data="5" class="l-button point_button" id="ID5" style="left:4265px;top: 4345px;position:absolute">LOCATION5</button><button title="Makaka Bay" data="6" class="l-button point_button" id="ID6" style="left:4418px;top: 4220px;position:absolute">LOCATION6</button><button title="Beacon Point" data="7" class="l-button point_button" id="ID7" style="left:4480px;top: 4208px;position:absolute">LOCATION7</button><button title="Waterfall Bay" data="8" class="l-button point_button" id="ID8" style="left:4686px;top: 4094px;position:absolute">LOCATION8</button><button title="Sawyers Point" data="9" class="l-button point_button" id="ID9" style="left:4883px;top: 4012px;position:absolute">LOCATION9</button><button title="Kaiteke Point" data="10" class="l-button point_button" id="ID10" style="left:5168px;top: 3865px;position:absolute">LOCATION10</button><button title="Te Pirau Point" data="11" class="l-button point_button" id="ID11" style="left:5223px;top: 4380px;position:absolute">LOCATION11</button><button title="Taratara Point" data="12" class="l-button point_button" id="ID12" style="left:5360px;top: 4380px;position:absolute">LOCATION12</button><button title="Tipitai Point" data="13" class="l-button point_button" id="ID13" style="left:5441px;top: 4385px;position:absolute">LOCATION13</button><button title="Wattle Bay" data="14" class="l-button point_button" id="ID14" style="left:5590px;top: 4520px;position:absolute">LOCATION14</button><button title="Orua Bay" data="15" class="l-button point_button" id="ID15" style="left:6076px;top: 4500px;position:absolute">LOCATION15</button><button title="Big Bay" data="16" class="l-button point_button" id="ID16" style="left:6810px;top: 4380px;position:absolute">LOCATION16</button><button title="Mako Point" data="17" class="l-button point_button" id="ID17" style="left:6590px;top: 4190px;position:absolute">LOCATION17</button><button title="Huia Bank" data="18" class="l-button point_button" id="ID18" style="left:5590px;top: 4020px;position:absolute">LOCATION18</button><button title="Lady Bell Point" data="19" class="l-button point_button" id="ID19" style="left:5970px;top: 3860px;position:absolute">LOCATION19</button><button title="Daniel Bay" data="20" class="l-button point_button" id="ID20" style="left:5868px;top: 3696px;position:absolute">LOCATION20</button><button title="Kakamatua Point" data="21" class="l-button point_button" id="ID21" style="left:5710px;top: 3640px;position:absolute">LOCATION21</button><button title="Kaitorakihi Bay" data="22" class="l-button point_button" id="ID22" style="left:5565px;top: 3555px;position:absolute">LOCATION22</button><button title="Kakamatua inlet" data="23" class="l-button point_button" id="ID23" style="left:5805px;top: 3445px;position:absolute">LOCATION23</button><button title="Puponga Point" data="24" class="l-button point_button" id="ID24" style="left:6380px;top: 3870px;position:absolute">LOCATION24</button><button title="Mill Bay" data="25" class="l-button point_button" id="ID25" style="left:6065px;top: 3110px;position:absolute">LOCATION25</button><button title="Wairopa Channel" data="26" class="l-button point_button" id="ID26" style="left:6634px;top: 2890px;position:absolute">LOCATION26</button><button title="Lawry Point" data="27" class="l-button point_button" id="ID27" style="left:6430px;top: 2980px;position:absolute">LOCATION27</button><button title="Taumatorea Point" data="28" class="l-button point_button" id="ID28" style="left:6700px;top: 2760px;position:absolute">LOCATION28</button><button title="Big Muddy Creek" data="29" class="l-button point_button" id="ID29" style="left:6357px;top: 2490px;position:absolute">LOCATION29</button><button title="Symonds Bay" data="30" class="l-button point_button" id="ID30" style="left:6405px;top: 2475px;position:absolute">LOCATION30</button><button title="Takoroa Point" data="31" class="l-button point_button" id="ID31" style="left:7000px;top: 2420px;position:absolute">LOCATION31</button><button title="Little Muddy Creek" data="32" class="l-button point_button" id="ID32" style="left:6930px;top: 2250px;position:absolute">LOCATION32</button><button title="Laingholm Point" data="33" class="l-button point_button" id="ID33" style="left:7110px;top: 2350px;position:absolute">LOCATION33</button><button title="Shag Point" data="34" class="l-button point_button" id="ID34" style="left:7410px;top: 2070px;position:absolute">LOCATION34</button><button title="Te Tau Bank" data="35" class="l-button point_button" id="ID35" style="left:7570px;top: 2440px;position:absolute">LOCATION35</button><button title="Opou Point" data="36" class="l-button point_button" id="ID36" style="left:7525px;top: 1865px;position:absolute">LOCATION36</button><button title="Wood Bay" data="37" class="l-button point_button" id="ID37" style="left:7430px;top: 1790px;position:absolute">LOCATION37</button><button title="Motu Karaka Bank" data="38" class="l-button point_button" id="ID38" style="left:7900px;top: 1610px;position:absolute">LOCATION38</button><button title="Block House Bay" data="39" class="l-button point_button" id="ID39" style="left:8250px;top: 1375px;position:absolute">LOCATION39</button><button title="Te Whau Point" data="40" class="l-button point_button" id="ID40" style="left:8215px;top: 1410px;position:absolute">LOCATION40</button><button title="Wattle Bay" data="41" class="l-button point_button" id="ID41" style="left:8690px;top: 1570px;position:absolute">LOCATION41</button><button title="Cape Horn" data="42" class="l-button point_button" id="ID42" style="left:8856px;top: 1665px;position:absolute">LOCATION42</button><button title="Hillsborough Bay" data="43" class="l-button point_button" id="ID43" style="left:9565px;top: 1340px;position:absolute">LOCATION43</button><button title="Onehunga Wharf" data="44" class="l-button point_button" id="ID44" style="left:9850px;top: 1390px;position:absolute">LOCATION44</button><button title="Puketutu Island" data="45" class="l-button point_button" id="ID45" style="left:9090px;top: 2340px;position:absolute">LOCATION45</button><button title="Karole Bank" data="46" class="l-button point_button" id="ID46" style="left:8630px;top: 3540px;position:absolute">LOCATION46</button><button title="Waokariri Creek" data="47" class="l-button point_button" id="ID47" style="left:10575px;top: 3170px;position:absolute">LOCATION47</button><button title="Otaimako Creek" data="48" class="l-button point_button" id="ID48" style="left:10705px;top: 3430px;position:absolute">LOCATION48</button><button title="Wiroa Island" data="49" class="l-button point_button" id="ID49" style="left:10470px;top: 3700px;position:absolute">LOCATION49</button><button title="Hikihiki Bank" data="50" class="l-button point_button" id="ID50" style="left:10345px;top: 4575px;position:absolute">LOCATION50</button><button title="Hangore Bank" data="51" class="l-button point_button" id="ID51" style="left:8350px;top: 4780px;position:absolute">LOCATION51</button><button title="Awhitu Point" data="52" class="l-button point_button" id="ID52" style="left:9790px;top: 5680px;position:absolute">LOCATION52</button><button title="Poutawa Bank" data="53" class="l-button point_button" id="ID53" style="left:8873px;top: 5980px;position:absolute">LOCATION53</button><button title="Waiku Channel" data="54" class="l-button point_button" id="ID54" style="left:7460px;top: 5118px;position:absolute">LOCATION54</button><button title="Grahams Beach" data="55" class="l-button point_button" id="ID55" style="left:7250px;top: 4850px;position:absolute">LOCATION55</button><button title="Hudsons Beach" data="56" class="l-button point_button" id="ID56" style="left:7405px;top: 4700px;position:absolute">LOCATION56</button><button title="Kauritutahi Creek" data="57" class="l-button point_button" id="ID57" style="left:7090px;top: 5605px;position:absolute">LOCATION57</button><button title="Mataka Wau Point" data="58" class="l-button point_button" id="ID58" style="left:7340px;top: 6150px;position:absolute">LOCATION58</button><button title="Otamaneara Island" data="59" class="l-button point_button" id="ID59" style="left:7410px;top: 6300px;position:absolute">LOCATION59</button><button title="Matakawau Creek" data="60" class="l-button point_button" id="ID60" style="left:7230px;top: 6470px;position:absolute">LOCATION60</button><button title="Kellys Landing" data="61" class="l-button point_button" id="ID61" style="left:7425px;top: 6490px;position:absolute">LOCATION61</button><button title="Wairoa Point" data="62" class="l-button point_button" id="ID62" style="left:7550px;top: 6785px;position:absolute">LOCATION62</button><button title="Rangiriri Creek" data="63" class="l-button point_button" id="ID63" style="left:7390px;top: 7000px;position:absolute">LOCATION63</button><button title="Karaka Point" data="64" class="l-button point_button" id="ID64" style="left:7900px;top: 7000px;position:absolute">LOCATION64</button><button title="To Karoa Point" data="65" class="l-button point_button" id="ID65" style="left:7790px;top: 7240px;position:absolute">LOCATION65</button><button title="Naghere Bay" data="66" class="l-button point_button" id="ID66" style="left:7940px;top: 7160px;position:absolute">LOCATION66</button><button title="Ohiku Creek" data="67" class="l-button point_button" id="ID67" style="left:7800px;top: 7485px;position:absolute">LOCATION67</button><button title="Tetoro Point" data="68" class="l-button point_button" id="ID68" style="left:7970px;top: 7390px;position:absolute">LOCATION68</button><button title="Waiau Beach" data="69" class="l-button point_button" id="ID69" style="left:8180px;top: 7240px;position:absolute">LOCATION69</button><button title="Waitete Point" data="70" class="l-button point_button" id="ID70" style="left:8300px;top: 7330px;position:absolute">LOCATION70</button><button title="Kahawai Point" data="71" class="l-button point_button" id="ID71" style="left:8280px;top: 7590px;position:absolute">LOCATION71</button><button title="Glenbrook Beach" data="72" class="l-button point_button" id="ID72" style="left:8470px;top: 7710px;position:absolute">LOCATION72</button><button title="Waiuku River" data="73" class="l-button point_button" id="ID73" style="left:8235px;top: 7720px;position:absolute">LOCATION73</button><button title="Kallritutahi Island" data="74" class="l-button point_button" id="ID74" style="left:7360px;top: 5790px;position:absolute">LOCATION74</button><button title="Kauri Point" data="75" class="l-button point_button" id="ID75" style="left:7270px;top: 4440px;position:absolute">LOCATION75</button><button title="Purakau Channel " data="76" class="l-button point_button" id="ID76" style="left:7245px;top: 3340px;position:absolute">LOCATION76</button><button title="Karore Bank" data="77" class="l-button point_button" id="ID77" style="left:7220px;top: 3540px;position:absolute">LOCATION77</button><button title="Kaitarakihi Point" data="78" class="l-button point_button" id="ID78" style="left:5250px;top: 3647px;position:absolute">LOCATION78</button><button title="Hings Bay" data="79" class="l-button point_button" id="ID79" style="left:5175px;top: 3510px;position:absolute">LOCATION79</button><button title="Huia Bay" data="80" class="l-button point_button" id="ID80" style="left:5265px;top: 3460px;position:absolute">LOCATION80</button><button title="Harry Point" data="81" class="l-button point_button" id="ID81" style="left:5212px;top: 3407px;position:absolute">LOCATION81</button><button title="Haley Point" data="82" class="l-button point_button" id="ID82" style="left:5250px;top: 3310px;position:absolute">LOCATION82</button><button title="White Bluff" data="83" class="l-button point_button" id="ID83" style="left:9530px;top: 1405px;position:absolute">LOCATION83</button><button title="Shark Island" data="84" class="l-button point_button" id="ID84" style="left:11709px;top: 4939px;position:absolute">LOCATION84</button></div>
+ <a id="moved" href="http://vitalsoftsolution.com/demo/map-exam/exam/#container"></a>
+
+<script>
+
+window.onload=function(){
+//alert($(window).width());
+	$('#mapimg').on('dragstart',function(e){   e.preventDefault() ; console.log(e)})
+	$('#mapimg').on('dragend',function(e){clicked = false; })
+	$('#mapimg').on('dragleave',function(e){clicked = false; }) 
+	$('#mapimg').on('mouseleave',function(e){clicked = false; })
+setTimeout(function(){ $('#ID11').focus();;console.log('clicked'); },3000);
+	// $('#container').click();
+	//  $(window).scrollLeft(0);
+	//  $(window).scrollTop(0);
+	scrollx=0;
+	/*
+ $('#container').on('mousewheel',function(e){
+	
+	if(e.offsetX > scrollx   )	
+	zoomlevel('plus' ,0.010);
+	
+	if(e.offsetX < scrollx && e.offsetX != scrollx )	
+	 zoomlevel('less' ,0.010);
+
+	console.log(e);
+	console.log('X :' + e.clientX +' -  Y :'+e.clientY);
+		//if(e.mouseX > 500)
+	$(this).scrollLeft(e.clientX);
+	//if(e.mouseY > 500)
+	$(this).scrollTop(e.clientY);
+
+scrollx =e.offsetX;
+return false ;
+})	
+	*/
+	
+var clicked = false, clickY ,clickX;
+$('#mapimg').on({
+	'mouseup': function() {
+        clicked = false;
+		
+		$('html').css('cursor', 'pointer');
+		return;
+		//alert(clicked);
+        
+    },
+    'mousemove': function(e) {
+        if(clicked) updateScrollPosition(e);
+    },
+    'mousedown': function(e) {
+		//if(clicked) updateScrollPosition(e);
+        clicked = true;
+        clickY = e.pageY;
+		clickX=e.pageX;
+    },
+	'dragend': function() {
+        clicked = false;
+		
+		$('html').css('cursor', 'pointer');
+		return;
+		//alert(clicked);
+        
+    },
+	'dragover':function() {
+        clicked = false;
+		
+		$('html').css('cursor', 'pointer');
+		return;
+		//alert(clicked);
+        
+    }
+	
+    
+});
+
+var updateScrollPosition = function(e) {
+	if(clicked ==false) return ;
+    $('#mapimg').css('cursor', 'all-scroll');
+    $(window).scrollTop($(window).scrollTop() + (clickY - e.pageY));
+    $(window).scrollLeft($(window).scrollLeft() + (clickX - e.pageX));
+	
+}
+}
+
+function ScrollZoom(container,max_scale,factor){
+    var target = container ;//.children().first()
+    var size = {w:target.width(),h:target.height()}
+ 
+	//$(window).scrollLeft((mylocations[globalIndex]['X']/2) -($(window).width()/2));
+//$(window).scrollTop((mylocations[globalIndex]['Y']/2) -250);
+    //var pos = {x:(mylocations[globalIndex]['X']/2) -($(window).width()/2),y:((mylocations[globalIndex]['Y']/2) -250)}
+    var pos = {x:0,y:0}
+    var zoom_target = {x:0,y:0}
+  //  var zoom_target = {x:0,y:0}
+    var zoom_point = {x:0,y:0}
+    var scale = level;
+  target.css('transform-origin','0 0');
+  //  target.css('transform-origin',x:(mylocations[globalIndex]['X']+' '+mylocations[globalIndex]['Y'] );
+    target.on("mousewheel DOMMouseScroll",scrolled)
+
+    function scrolled(e){
+        var offset = container.offset()
+    zoom_point.x = e.pageX ;//- offset.left
+       // zoom_point.x = (mylocations[globalIndex]['X']/2) ;
+        zoom_point.y = e.pageY ;//- offset.top
+       // zoom_point.y = (mylocations[globalIndex]['Y']/2) ;
+//console.log('First : ' );
+//console.log( zoom_point);
+scale =level ;
+//console.log(scale);
+	//	$(window).scrollLeft(zoom_target.x);
+	//	$(window).scrollTop(zoom_target.y);
+
+        e.preventDefault();
+        var delta = e.delta || e.originalEvent.wheelDelta;
+        if (delta === undefined) {
+          //we are on firefox
+          delta = e.originalEvent.detail;
+        }
+        delta = Math.max(-0.10,Math.min(0.10,delta)) // cap the delta to [-1,1] for cross browser consistency
+
+        // determine the point on where the slide is zoomed in
+       zoom_target.x = (zoom_point.x - pos.x)/scale
+      //  zoom_target.x = ( mylocations[globalIndex]['X']-pos.x);
+        zoom_target.y = (zoom_point.y - pos.y)/scale
+		//   zoom_target.y = ( mylocations[globalIndex]['Y']-pos.y);
+//console.log(zoom_target);
+        // apply zoom
+        scale += delta*factor * scale
+        scale = Math.max(0.10,Math.min(max_scale,scale))
+	//	console.log(scale);
+        // calculate x and y based on zoom
+       // pos.x = -zoom_target.x * scale + zoom_point.x
+       // pos.y = -zoom_target.y * scale + zoom_point.y
+
+
+        // Make sure the slide stays in its container area when zooming out
+        if(pos.x>0)
+            pos.x = 0
+        if(pos.x+size.w*scale<size.w)
+           // pos.x = -size.w  ;//* (scale-0.1)
+            pos.x = -size.w*(scale-0.1)
+        if(pos.y>0)
+            pos.y = 0
+         if(pos.y+size.h*scale<size.h)
+          //  pos.y = -size.h ;//*(scale-0.1)
+            pos.y = -size.h*(scale-0.1)
+
+        update(e,container)
+    }
+
+    function update(e,container){
+        //target.css('transform','translate('+(pos.x)+'px,'+(pos.y)+'px) scale('+scale+','+scale+')')
+     console.log('translate('+(pos.x)+'px,'+(pos.y)+'px) scale('+scale+','+scale+')')
+        target.css('transform','translate(0px,0px) scale('+scale+','+scale+')')
+		$('#level').html(Math.round(scale * 100 )+'%');
+		//$('#container').scrollLeft(pos.x);
+		
+	 	var offset = container.offset(  );
+		
+    x =   offset.left - e.pageX ;
+    y = offset.top - e.pageY ;
+		//$('#container').css('margin-left',pos.x ) ;
+		//$('#container').css('margin-top',pos.y  );
+	// window.scrollTo(x,y);
+//	 console.log('X -'+ (Math.abs(pos.x * scale)+e.offsetX) + ' : Y : '+ (Math.abs(pos.y * scale)+e.offsetY));
+	 //$('#container').css('left',x);
+	 //$('#container').css('top',y);
+//	window.scrollTo((Math.abs(pos.x * scale)+e.offsetX), (Math.abs(pos.y * scale)+e.offsetY));
+		level =scale ;
+		console.log(level);
+    }
+}
+new ScrollZoom($('#container'),5,0.1);
+
+</script>
+
+</body></html>
